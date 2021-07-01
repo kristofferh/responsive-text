@@ -1,0 +1,7 @@
+{
+  "name": "Responsive Text",
+  "id": "992348141647816368",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "dist/ui.html"
+}

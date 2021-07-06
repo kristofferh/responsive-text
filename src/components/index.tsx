@@ -1,3 +1,5 @@
+import { Button, Input, Label } from "react-figma-plugin-ds";
+
 export const App = () => {
   const handleCreateClick = () => {
     const count = 5;
@@ -9,9 +11,9 @@ export const App = () => {
 
   return (
     <div>
-      <button id="create" onClick={handleCreateClick}>
-        Create
-      </button>
+      <Label htmlFor="viewport">Viewport width (in px)</Label>
+      <Input id="viewport" placeholder="Viewport width" />
+      <Button onClick={handleCreateClick}>Create</Button>
       <button>Cancel</button>
     </div>
   );

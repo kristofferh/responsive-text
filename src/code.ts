@@ -1,9 +1,10 @@
 import { calculateFontSize } from "./utils/index";
 
-figma.showUI(__html__);
+figma.showUI(__html__, { height: 500 });
 
 figma.ui.onmessage = (msg) => {
-  if (msg.type === "create-rectangles") {
+  const { data, type } = msg;
+  if (type === "create-rectangles") {
     const nodes: SceneNode[] = [];
     for (let i = 0; i < msg.count; i++) {
       const rect = figma.createRectangle();
@@ -16,23 +17,40 @@ figma.ui.onmessage = (msg) => {
     figma.viewport.scrollAndZoomIntoView(nodes);
   }
 
-  if (msg.type === "updateTextStyles") {
-    updateTextStyles();
+  if (type === "updateTextStyles") {
+    updateTextStyles(data);
   }
-
-  //figma.closePlugin();
 };
 
-function updateTextStyles() {
+function updateTextStyles(data: any) {
   const textSelection = filterData(
     figma.currentPage.selection,
     (i: any) => i.type == "TEXT"
   );
+
   if (!textSelection.length) {
     figma.closePlugin("No text layer selected 🤷‍♂️");
     return;
   }
-  const fontSize = calculateFontSize().calculated;
+
+  const {
+    maxFontSize,
+    maxWidthViewport,
+    minFontSize,
+    minWidthViewport,
+    pixelsPerRem,
+    viewport,
+  } = data;
+  const { calculated: fontSize, clampCSS } = calculateFontSize(
+    minWidthViewport,
+    maxWidthViewport,
+    minFontSize,
+    maxFontSize,
+    viewport,
+    pixelsPerRem
+  );
+  // TODO: Write this to the UI.
+  console.log(fontSize, clampCSS);
   updateSize(textSelection, fontSize);
 }
 
@@ -47,43 +65,6 @@ async function updateSize(textSelection: TextNode[], fontSize: number) {
     }
   }
 }
-
-// function calculateFontSize() {
-//   const pixelsPerRem = 16;
-//   const minWidthPx = 320;
-//   const maxWidthPx = 1920;
-//   const maxFontSize = 144;
-//   const minFontSize = 16;
-//   const maxFontSizeRem = 9;
-//   const minFontSizeRem = 1;
-//   const minWidth = minWidthPx / pixelsPerRem;
-//   const maxWidth = maxWidthPx / pixelsPerRem;
-//   const currentViewport = 1348;
-
-//   const slope = (maxFontSizeRem - minFontSizeRem) / (maxWidth - minWidth);
-//   const yAxisIntersection = -minWidth * slope + minFontSizeRem;
-
-//   console.log(
-//     `${minFontSizeRem}rem, ${yAxisIntersection}rem + ${
-//       slope * 100
-//     }vw, ${maxFontSizeRem}rem`
-//   );
-//   console.log(
-//     minFontSizeRem * 16,
-//     yAxisIntersection * 16 + slope * 100 * (currentViewport / 100),
-//     maxFontSizeRem * 16
-//   );
-
-//   const slopePx = (maxFontSize - minFontSize) / (maxWidthPx - minWidthPx);
-//   const yAxisIntersectionPx = -minWidthPx * slope + minFontSize;
-
-//   console.log(
-//     "hi",
-//     minFontSize,
-//     yAxisIntersectionPx + slopePx * 100 * (currentViewport / 100),
-//     maxFontSize
-//   );
-// }
 
 function filterData(data: readonly SceneNode[], predicate: Function) {
   return !!!data

@@ -1,0 +1,33 @@
+.container {
+  margin: 16px;
+  text-align: left;
+}
+
+.field-wrapper {
+  margin: 16px 0;
+}
+
+.form {
+  margin-bottom: 16px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.input {
+  border: 0;
+  border-bottom: 1px solid #eee;
+  padding: 4px 0;
+  width: 100%;
+  transition: border-bottom 0.2s ease;
+}
+
+.input:hover,
+.input:focus {
+  outline: none;
+  box-shadow: none;
+  border-bottom: 1px solid #000;
+}

@@ -1,40 +1,21 @@
-Below are the steps to get your plugin running. You can also find instructions at:
+# Responsive Text Figma Plugin
 
-  https://www.figma.com/plugin-docs/setup/
+_Responsive Text_ is a Figma plugin that will let you determine (and set) the pixel value of a given text size based on a set of ranges, mimicing responsive typography in a web browser.
 
-This plugin template uses Typescript and NPM, two standard tools in creating JavaScript applications.
+The method used is described in detail in this excellent [CSS Tricks](https://css-tricks.com/linearly-scale-font-size-with-css-clamp-based-on-the-viewport/) article by Pedro Rodriguez.
 
-First, download Node.js which comes with NPM. This will allow you to install TypeScript and other
-libraries. You can find the download link here:
+This plugin takes care of the math and updates the text size of the selected text frame(s), it'll also display the CSS `clamp()` function so that you can hand that off to developers.
 
-  https://nodejs.org/en/download/
+Because Figma doesn't, yet, allow for triggering plugin code on events (like frame resizing) it's not truly responsive typography, but rather it let's you update font size at a specified frame size without having to manually calculate and update it.
 
-Next, install TypeScript using the command:
+## Usage
 
-  npm install -g typescript
+Select the text frame you want to update and launch the plugin.
 
-Finally, in the directory of your plugin, get the latest type definitions for the plugin API by running:
+The plugin takes a number of inputs - the minimum and maximum viewports the font should scale in-between, the minimum and maximum font values, the viewport size you are currently targeting, and the number of pixels in a REM (this is defaulted to 16, and most likely there is no need to change this). Once you click `Create` the text frame you've selected will override with the newly calculated pixel value. The clamping function that the plugin generated will be displayed in the plugin popup window. You'll probably want to note that somewhere in documentation so that developers can implement it.
 
-  npm install --save-dev @figma/plugin-typings
+## Development
 
-If you are familiar with JavaScript, TypeScript will look very familiar. In fact, valid JavaScript code
-is already valid Typescript code.
-
-TypeScript adds type annotations to variables. This allows code editors such as Visual Studio Code
-to provide information about the Figma API while you are writing code, as well as help catch bugs
-you previously didn't notice.
-
-For more information, visit https://www.typescriptlang.org/
-
-Using TypeScript requires a compiler to convert TypeScript (code.ts) into JavaScript (code.js)
-for the browser to run.
-
-We recommend writing TypeScript code using Visual Studio code:
-
-1. Download Visual Studio Code if you haven't already: https://code.visualstudio.com/.
-2. Open this directory in Visual Studio Code.
-3. Compile TypeScript to JavaScript: Run the "Terminal > Run Build Task..." menu item,
-    then select "tsc: watch - tsconfig.json". You will have to do this again every time
-    you reopen Visual Studio Code.
-
-That's it! Visual Studio Code will regenerate the JavaScript file every time you save.
+- Clone this repository
+- Run `npm install` to get the packages
+- Run `npm run dev` to run the webpack watcher

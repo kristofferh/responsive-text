@@ -9,7 +9,7 @@ figma.ui.onmessage = (msg) => {
   }
 };
 
-function updateTextStyles(data: any) {
+async function updateTextStyles(data: any) {
   const textSelection = filterData(
     figma.currentPage.selection,
     (i: any) => i.type == "TEXT"
@@ -36,13 +36,29 @@ function updateTextStyles(data: any) {
     viewport,
     pixelsPerRem
   );
-  // TODO: Write this to the UI.
-  console.log(fontSize, clampCSS);
-  updateSize(textSelection, fontSize);
+
+  const sizeUpdated = await updateSize(textSelection, fontSize);
+  if (sizeUpdated) {
+    figma.ui.postMessage({
+      msg: "Updated font size",
+      type: "updatedFontSize",
+      data: {
+        clampCSS,
+        fontSize,
+      },
+    });
+  }
 }
 
 async function updateSize(textSelection: TextNode[], fontSize: number) {
   for (const text of textSelection) {
+    if (text.hasMissingFont) {
+      figma.closePlugin(
+        "Text layer has missing font, replace it before running this plugin again"
+      );
+      return false;
+    }
+
     if (text.type === "TEXT" && text.characters) {
       for (let i = 0; i < text.characters.length; i++) {
         const name = text.getRangeFontName(i, i + 1) as FontName;
@@ -51,6 +67,7 @@ async function updateSize(textSelection: TextNode[], fontSize: number) {
       text.fontSize = fontSize;
     }
   }
+  return true;
 }
 
 function filterData(data: readonly SceneNode[], predicate: Function) {

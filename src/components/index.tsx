@@ -1,14 +1,14 @@
 import { Button } from "react-figma-plugin-ds";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import "./index.css";
 
 export const App = () => {
-  const [minWidthViewport, setMinWidthViewport] = useState(0);
-  const [maxWidthViewport, setMaxWidthViewport] = useState(0);
+  const [minWidthViewport, setMinWidthViewport] = useState(375);
+  const [maxWidthViewport, setMaxWidthViewport] = useState(1920);
   const [minFontSize, setMinFontSize] = useState(0);
   const [maxFontSize, setMaxFontSize] = useState(0);
-  const [viewport, setViewport] = useState(0);
+  const [viewport, setViewport] = useState(1024);
   const [pixelsPerRem, setPixelsPerRem] = useState(16);
   const handleCreateClick = () => {
     const data = {
@@ -24,6 +24,23 @@ export const App = () => {
       "*"
     );
   };
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const {
+        data: { pluginMessage },
+      } = event;
+      const { type, data } = pluginMessage;
+      if (type === "updatedFontSize") {
+        // TODO: Write this to UI.
+        console.log(data);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
 
   // TODO: Add formik
   const handleMinWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +121,7 @@ export const App = () => {
             type="number"
             onChange={handleViewportChange}
             className="input"
+            defaultValue={1024}
           />
         </div>
         <div className="field-wrapper">

@@ -20,8 +20,6 @@ figma.ui.onmessage = (msg) => {
   if (type === "updateTextStyles") {
     updateTextStyles(data);
   }
-
-  //figma.closePlugin();
 };
 
 function updateTextStyles(data: any) {
@@ -51,6 +49,7 @@ function updateTextStyles(data: any) {
     viewport,
     pixelsPerRem
   );
+  // TODO: Write this to the UI.
   console.log(fontSize, clampCSS);
   updateSize(textSelection, fontSize);
 }

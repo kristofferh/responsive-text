@@ -31,3 +31,96 @@ label {
   box-shadow: none;
   border-bottom: 1px solid #000;
 }
+
+.input--error {
+  border-bottom-color: #e53935;
+}
+
+.error {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #e53935;
+}
+
+.result {
+  background: #f5f5f5;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.result-label {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+  margin: 0 0 6px;
+}
+
+.result-copy-row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.result-value {
+  flex: 1;
+  font-size: 12px;
+  word-break: break-all;
+  color: #111;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 0;
+  transition: color 0.15s ease;
+  outline: none;
+  box-shadow: none;
+}
+
+.copy-btn:hover {
+  color: #111;
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.copy-confirmation {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 4px;
+  animation: fade-in-out 2s ease forwards;
+  pointer-events: none;
+}
+
+.result-size {
+  font-size: 11px;
+  color: #444;
+  margin: 0;
+}

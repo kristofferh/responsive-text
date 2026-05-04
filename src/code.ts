@@ -1,6 +1,14 @@
 import { calculateFontSize } from "./utils/index";
 
+const STORAGE_KEY = "formValues";
+
 figma.showUI(__html__, { height: 500 });
+
+async function init() {
+  const stored = await figma.clientStorage.getAsync(STORAGE_KEY);
+  figma.ui.postMessage({ type: "initValues", data: stored ?? null });
+}
+init();
 
 figma.ui.onmessage = (msg) => {
   const { data, type } = msg;
@@ -39,6 +47,7 @@ async function updateTextStyles(data: any) {
 
   const sizeUpdated = await updateSize(textSelection, fontSize);
   if (sizeUpdated) {
+    await figma.clientStorage.setAsync(STORAGE_KEY, data);
     figma.ui.postMessage({
       msg: "Updated font size",
       type: "updatedFontSize",
